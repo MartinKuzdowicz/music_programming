@@ -55,9 +55,9 @@ end
 define :mainTheme do
   use_synth :pulse
   2.times do
-    play :d5, release: 2, attack: 0.1
+    play :d5, release: 2, attack: 0.2
     sleep 1
-    play :eb5, release: 2, attack: 0.1
+    play :eb5, release: 2, attack: 0.3
     sleep 1
     play :bb5, release: 2, attack: 0.5
     sleep 1
@@ -67,7 +67,7 @@ define :mainTheme do
     play :g5, release: 2, attack: 0.1
     sleep 1
     play :c5, release: 3, attack: 0.1
-    play :a5, release: 3, attack: 0.1
+    play :a5, release: 35, attack: 0.1
     sleep 1
     sleep 2
   end
@@ -126,16 +126,6 @@ end
 
 with_fx :reverb do
 
-  # intro
-  in_thread do
-    2.times do
-      play :d7, amp: 0.002
-      sleep 1
-      play :d7, amp: 0.002
-      sleep 1
-    end
-  end
-
   # background thread
   in_thread(name: :backgr_left) do
     sleep 4
@@ -145,10 +135,9 @@ with_fx :reverb do
 
     verseFourTimes -1
     verseFourTimes -1
+
     verseFourTimes -1
 
-    verseOneTime -1
-    verseOneTime -1
   end
   in_thread(name: :backgr_right) do
     sleep 4
@@ -163,6 +152,23 @@ with_fx :reverb do
 
   end
 
+  # base thread
+  in_thread do
+    sleep 4
+    8.times do
+      with_fx :reverb do
+        sample :bass_thick_c
+        sleep 4
+        sample :bass_thick_c, rpitch: 2, release: 1
+        sleep 4
+        sample :bass_thick_c, rpitch: 3, release: 1
+        sleep 4
+        sample :bass_thick_c, rpitch: 5, release: 2
+        sleep 4
+      end
+    end
+  end
+
   # main melody thread
   in_thread(name: :mainTheme) do
     sleep 4
@@ -172,7 +178,31 @@ with_fx :reverb do
     sleep 16
     mainTheme
   end
+end
 
+# drums loop
+in_thread do
+  with_fx :reverb, mix: 0.7 do
+    sample :drum_cymbal_closed
+    sleep 1
+    sample :drum_cymbal_closed
+    sleep 1
+    sample :drum_cymbal_closed
+    sleep 1
+    sample :drum_cymbal_soft
+    sleep 1
+    16.times do
+      sample :drum_heavy_kick
+      sleep 4
+      sleep 1
+      sample :drum_tom_mid_hard
+      sleep 1
+      sample :drum_snare_hard, amp: 0.5, release: 2
+      sample :drum_cymbal_open, amp: 0.4
+      sleep 1
+      sleep 1
+    end
+  end
 end
 
 # ------------------------------------------
