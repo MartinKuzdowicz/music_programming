@@ -1,0 +1,178 @@
+#Martin Kuzdowicz sonic_pi etude nr 1
+# functions -----------------------------
+
+define :verseOneTime do |panVal|
+  2.times do
+    play :c5, pan: panVal
+    sleep 0.25
+    play :eb, pan: panVal
+    sleep 0.25
+    play :g, pan: panVal
+    sleep 0.25
+    play :c5, pan: panVal
+    sleep 0.25
+    play :eb, pan: panVal
+    sleep 0.25
+    play :g, pan: panVal
+    sleep 0.25
+    play :c5, pan: panVal
+    sleep 0.25
+    play :eb, pan: panVal
+    sleep 0.25
+  end
+  2.times do
+    play :d, pan: panVal
+    sleep 0.25
+    play :f, pan: panVal
+    sleep 0.25
+    play :a, pan: panVal
+    sleep 0.25
+    play :d, pan: panVal
+    sleep 0.25
+    play :f, pan: panVal
+    sleep 0.25
+    play :a, pan: panVal
+    sleep 0.25
+    play :d, pan: panVal
+    sleep 0.25
+    play :f, pan: panVal
+    sleep 0.25
+  end
+end
+
+# ------------------------------------------
+
+# verse 4 bars
+define :verseFourTimes do |panVal|
+  4.times do
+    verseOneTime panVal
+  end
+end
+
+# ------------------------------------------
+
+# main theme
+define :mainTheme do
+  use_synth :pulse
+  2.times do
+    play :d5, release: 2, attack: 0.1
+    sleep 1
+    play :eb5, release: 2, attack: 0.1
+    sleep 1
+    play :bb5, release: 2, attack: 0.5
+    sleep 1
+    play :a5, release: 2, attack: 0.2
+    sleep 1
+    play :d5, release: 3, attack: 0.1
+    play :g5, release: 2, attack: 0.1
+    sleep 1
+    play :c5, release: 3, attack: 0.1
+    play :a5, release: 3, attack: 0.1
+    sleep 1
+    sleep 2
+  end
+  with_fx :echo do
+    use_synth :saw
+    2.times do
+      play :d6
+      sleep 0.5
+      play :bb6
+      sleep 0.5
+      play :c6
+      sleep 0.5
+      play :a6
+      sleep 0.5
+      play :bb6
+      sleep 0.5
+      play :g6
+      sleep 0.5
+      play :a6
+      sleep 0.5
+      play :f6
+      sleep 0.5
+
+      play :d6
+      sleep 0.5
+      play :bb6
+      sleep 0.5
+      play :c6
+      sleep 0.5
+      play :a6
+      sleep 0.5
+
+      play :bb6
+      sleep 0.25
+      play :a6
+      sleep 0.25
+      play :g6
+      sleep 0.25
+      play :f6
+      sleep 0.25
+      play :a6
+      sleep 0.25
+      play :g6
+      sleep 0.25
+      play :f6
+      sleep 0.25
+      play :eb6, release: 4
+      sleep 0.25
+    end
+  end
+end
+
+# ------------------------------------------
+
+# Main Threads ----------------------------------
+
+with_fx :reverb do
+
+  # intro
+  in_thread do
+    2.times do
+      play :d7, amp: 0.002
+      sleep 1
+      play :d7, amp: 0.002
+      sleep 1
+    end
+  end
+
+  # background thread
+  in_thread(name: :backgr_left) do
+    sleep 4
+
+    verseOneTime -1
+    verseOneTime -1
+
+    verseFourTimes -1
+    verseFourTimes -1
+    verseFourTimes -1
+
+    verseOneTime -1
+    verseOneTime -1
+  end
+  in_thread(name: :backgr_right) do
+    sleep 4
+
+    verseOneTime 1
+    verseOneTime 1
+
+    verseFourTimes 1
+    verseFourTimes 1
+
+    verseFourTimes 1
+
+  end
+
+  # main melody thread
+  in_thread(name: :mainTheme) do
+    sleep 4
+
+    sleep 16
+    mainTheme
+    sleep 16
+    mainTheme
+  end
+
+end
+
+# ------------------------------------------
