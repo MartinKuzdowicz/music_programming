@@ -198,7 +198,7 @@ in_thread do
       sample :drum_tom_mid_hard
       sleep 1
       sample :drum_snare_hard, amp: 0.5, release: 2
-      sample :drum_cymbal_open, amp: 0.4
+      sample :drum_cymbal_open, attack: 0.01, sustain: 1, release: 1, amp: 0.5
       sleep 1
       sleep 1
     end
