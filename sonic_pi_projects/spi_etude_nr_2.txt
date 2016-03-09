@@ -62,27 +62,31 @@ with_fx :reverb do
     end
 
     # -------------------------------------------------------------------------------------------------------
+    define :coda do |volume|
+      play :fs5, attack: 0.5, sustain: 1.6, release: 0.2, amp: volume
+      sleep 2
+      play :b5, attack: 0.5, sustain: 1.6, release: 0.2, amp: volume
+      sleep 2
+      play :a5, attack: 0.5, sustain: 1.5, release: 0.25, amp: volume
+      sleep 2
+      play :g5, attack: 0.5, sustain: 1.4, release: 0.2, amp: volume
+      sleep 2
+      play :fs5, attack: 0.5, sustain: 1.6, release: 0.2, amp: volume
+      sleep 2
+      play :b5, attack: 0.5, sustain: 1.6, release: 0.2, amp: volume
+      sleep 2
+      play :cs6, attack: 0.5, sustain: 2, release: 0.2, amp: volume
+      sleep 2
+      play :d6, attack: 0.5, sustain: 2, release: 0.2, amp: volume
+      sleep 2
+    end
+
     # coda theeme
     in_thread do
       sleep 56
       use_synth :hoover
       2.times do
-        play :fs5, attack: 0.5, sustain: 1.6, release: 0.2, amp: 0.3
-        sleep 2
-        play :b5, attack: 0.5, sustain: 1.6, release: 0.2, amp: 0.3
-        sleep 2
-        play :a5, attack: 0.5, sustain: 1.5, release: 0.25, amp: 0.3
-        sleep 2
-        play :g5, attack: 0.5, sustain: 1.4, release: 0.2, amp: 0.3
-        sleep 2
-        play :fs5, attack: 0.5, sustain: 1.6, release: 0.2, amp: 0.3
-        sleep 2
-        play :b5, attack: 0.5, sustain: 1.6, release: 0.2, amp: 0.3
-        sleep 2
-        play :cs6, attack: 0.5, sustain: 2, release: 0.2, amp: 0.3
-        sleep 2
-        play :d6, attack: 0.5, sustain: 2, release: 0.2, amp: 0.3
-        sleep 2
+        coda 0.4
       end
     end
 
@@ -90,7 +94,7 @@ with_fx :reverb do
     in_thread do
       sleep 56
       8.times do
-        sample :loop_amen, rate: 0.4399, amp: 2.5
+        sample :loop_amen, rate: 0.4399, amp: 2
         sleep sample_duration :loop_amen, rate: 0.4399
       end
     end
@@ -99,7 +103,7 @@ with_fx :reverb do
     in_thread do
       sleep 56
       4.times do
-        sample :bass_trance_c, rpitch: -8
+        sample :bass_trance_c, rpitch: -8, amp: 2
         sleep 2 * (sample_duration :loop_amen, rate: 0.4399)
       end
     end
